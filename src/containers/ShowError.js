@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import history from '../history';
+import { animateScroll as scroll } from 'react-scroll';
 
 import { clearError } from '../actions';
 import ErrorSvg from '../svg/error.svg';
@@ -53,6 +55,9 @@ const Svg = styled.img`
 
 const ShowError = ({ errors, clearError }) => {
   useEffect(() => {
+    scroll.scrollToTop({
+      smooth: true,
+    });
     return () => clearError();
   }, []);
 
@@ -62,6 +67,9 @@ const ShowError = ({ errors, clearError }) => {
   }
   return (
     <Wrapper>
+      <Helmet>
+        <title>Oooops!</title>
+      </Helmet>
       <TitleWrapper>
         <Title>Something went wrong!</Title>
         <SubTitle>{errors.data.status_message}</SubTitle>

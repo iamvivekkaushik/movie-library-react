@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import Header from '../components/Header';
 import NotFound from '../components/NotFound';
 import styled from 'styled-components';
+import { animateScroll as scroll } from 'react-scroll';
 
 import { getMoviesSearch, clearMovies } from '../actions';
 import MoviesList from '../components/MoviesList';
@@ -27,14 +29,6 @@ const Search = ({
   const params = queryString.parse(location.search);
   const { secure_base_url } = geral.base.images;
 
-  // When mounts go up
-  useEffect(() => {
-    window.scrollTo({
-      top: (0, 0),
-      behavior: 'smooth',
-    });
-  }, []);
-
   // Fetch movies hook
   useFetchMoviesSearch(query, getMoviesSearch, params, clearMovies);
 
@@ -57,6 +51,9 @@ const Search = ({
   else {
     return (
       <Wrapper>
+        <Helmet>
+          <title>{`${query} - search results`}</title>
+        </Helmet>
         <Header title={query} subtitle="search results" />
         <MoviesList movies={movies} baseUrl={secure_base_url} />;
       </Wrapper>
@@ -67,9 +64,8 @@ const Search = ({
 // Hook to fetch the movies, will be called everytime the route for the search changes
 function useFetchMoviesSearch(query, getMoviesSearch, params, clearMovies) {
   useEffect(() => {
-    window.scrollTo({
-      top: (0, 0),
-      behavior: 'smooth',
+    scroll.scrollToTop({
+      smooth: true,
     });
     getMoviesSearch(query, params.page);
     return () => clearMovies();
